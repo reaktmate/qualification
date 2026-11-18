@@ -6,95 +6,112 @@
 <title>取りたい資格リスト</title>
 <style>
   :root{
-    --bg:#f6f7f9; --card:#fff; --text:#1f2937; --sub:#6b7280; --line:#e5e7eb;
-    --accent:#2563eb; --want:#f59e0b; --study:#2563eb; --done:#16a34a;
+    --bg:#f4f6f8; --card:#fff; --text:#1f2937; --sub:#6b7280; --line:#e5e7eb;
+    --accent:#2563eb; --want:#f59e0b; --study:#2563eb; --done:#16a34a; --shadow:0 1px 3px rgba(0,0,0,.06);
   }
   @media (prefers-color-scheme: dark){
-    :root{ --bg:#0f1115; --card:#181b22; --text:#e5e7eb; --sub:#9ca3af; --line:#2a2e38; }
+    :root{ --bg:#0f1115; --card:#181b22; --text:#e5e7eb; --sub:#9ca3af; --line:#2a2e38; --shadow:none; }
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text)}
-  .wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
-  h1{font-size:1.5rem;margin:0 0 4px}
-  .lead{color:var(--sub);margin:0 0 20px;font-size:.9rem}
-  .stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 16px;min-width:100px}
-  .stat b{display:block;font-size:1.4rem}
-  .stat span{font-size:.75rem;color:var(--sub)}
-  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:20px}
-  .bar i{display:block;height:100%;background:var(--done);width:0;transition:width .3s}
-  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  body{margin:0;font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  a{color:var(--accent)}
+  .wrap{max-width:960px;margin:0 auto;padding:24px 16px 72px}
+  header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+  header.top h1{font-size:1.5rem;margin:0;cursor:pointer}
   input,select,textarea,button{font:inherit;color:inherit}
-  input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+  input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%}
+  button{cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 16px}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+  button:hover{filter:brightness(.96)}
+
+  /* summary */
+  .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
+  .stat b{display:block;font-size:1.6rem;line-height:1.2}
+  .stat span{font-size:.78rem;color:var(--sub)}
+  .stat.want b{color:var(--want)} .stat.study b{color:var(--study)} .stat.done b{color:var(--done)}
+  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:24px}
+  .bar i{display:block;height:100%;background:var(--done);transition:width .3s}
+
+  /* home: category cards */
+  .sectionTitle{font-size:1rem;margin:0 0 12px;color:var(--sub);font-weight:600}
+  .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .cat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;box-shadow:var(--shadow);transition:transform .12s, border-color .12s;text-decoration:none;color:inherit;display:block}
+  .cat:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .cat .icons{font-size:1.6rem;min-height:2.2rem;letter-spacing:4px}
+  .cat h3{margin:6px 0 2px;font-size:1.1rem}
+  .cat .count{font-size:.82rem;color:var(--sub)}
+  .cat .mini{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin:10px 0 8px}
+  .cat .mini i{display:block;height:100%;background:var(--done)}
+  .cat .badges{display:flex;gap:6px;flex-wrap:wrap;font-size:.74rem}
+  .cat.all{border-style:dashed}
+
+  /* category page */
+  .crumb{display:inline-block;margin-bottom:10px;text-decoration:none;font-size:.9rem}
+  .pageHead{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .pageHead h2{margin:0;font-size:1.4rem}
+  .pageHead .sp{flex:1}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .tabs button{border-radius:99px;padding:6px 14px;font-size:.88rem}
+  .tabs button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .tools input{flex:1;min-width:160px;width:auto}
   .tools select{width:auto}
-  button{cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 14px}
-  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-  button:hover{filter:brightness(.96)}
-  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
-  .tabs button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
-  .list{display:grid;gap:12px}
-  .item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;border-left:5px solid var(--want)}
-  .item.study{border-left-color:var(--study)} .item.done{border-left-color:var(--done)}
-  .item h3{margin:0 0 6px;font-size:1.05rem;display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-  .item.done h3 span.name{text-decoration:line-through;opacity:.6}
-  .meta{display:flex;gap:8px;flex-wrap:wrap;font-size:.78rem;color:var(--sub);margin-bottom:6px}
-  .tag{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:2px 10px}
-  .memo{font-size:.88rem;white-space:pre-wrap;margin:6px 0 0}
-  .actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-  .actions button{padding:4px 10px;font-size:.8rem}
-  .stars{color:var(--want);letter-spacing:1px;white-space:nowrap}
-  .empty{text-align:center;color:var(--sub);padding:40px 0}
-  dialog{border:none;border-radius:16px;padding:20px;width:min(480px,92vw);background:var(--card);color:var(--text)}
+
+  .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+  .item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;border-top:4px solid var(--want)}
+  .item.study{border-top-color:var(--study)} .item.done{border-top-color:var(--done)}
+  .item .head{display:flex;gap:10px;align-items:flex-start}
+  .item .ico{font-size:2rem;line-height:1.1}
+  .item .name{font-weight:700;font-size:1.05rem;flex:1;word-break:break-word}
+  .item.done .name{text-decoration:line-through;opacity:.55}
+  .stars{color:var(--want);font-size:.85rem;white-space:nowrap}
+  .meta{display:flex;gap:6px;flex-wrap:wrap;font-size:.76rem}
+  .tag{border-radius:99px;padding:2px 10px;background:var(--bg);border:1px solid var(--line);color:var(--sub)}
+  .tag.st-want{background:rgba(245,158,11,.14);color:var(--want);border-color:transparent}
+  .tag.st-study{background:rgba(37,99,235,.12);color:var(--study);border-color:transparent}
+  .tag.st-done{background:rgba(22,163,74,.14);color:var(--done);border-color:transparent}
+  .tag.warn{background:rgba(220,38,38,.12);color:#dc2626;border-color:transparent}
+  .memo{font-size:.86rem;white-space:pre-wrap;margin:0;color:var(--sub);word-break:break-word}
+  .actions{display:flex;gap:6px;margin-top:auto;padding-top:4px;flex-wrap:wrap}
+  .actions button{padding:5px 12px;font-size:.8rem}
+  .empty{text-align:center;color:var(--sub);padding:48px 0;grid-column:1/-1}
+
+  /* dialog */
+  dialog{border:none;border-radius:18px;padding:22px;width:min(500px,94vw);background:var(--card);color:var(--text)}
   dialog::backdrop{background:rgba(0,0,0,.45)}
-  dialog h2{margin:0 0 12px;font-size:1.15rem}
-  label{display:block;font-size:.8rem;color:var(--sub);margin:10px 0 4px}
+  dialog h2{margin:0 0 8px;font-size:1.2rem}
+  label{display:block;font-size:.8rem;color:var(--sub);margin:12px 0 4px}
   .row{display:flex;gap:10px} .row>div{flex:1}
-  .dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-  .ico{font-size:1.5rem;line-height:1;margin-right:8px}
-  .item h3 .name{flex:1}
-  .picker{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-  .picker button{font-size:1.2rem;padding:2px 6px;border-radius:8px;line-height:1.4}
+  .dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+  .picker{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+  .picker button{font-size:1.2rem;padding:2px 7px;border-radius:8px;line-height:1.4}
   .picker button.on{background:var(--accent);border-color:var(--accent)}
   .iconRow{display:flex;gap:8px;align-items:center}
   .iconRow input{width:72px;text-align:center;font-size:1.3rem}
-  footer{margin-top:28px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-  footer button{font-size:.8rem}
+  footer{margin-top:36px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  footer button{font-size:.8rem;padding:6px 12px}
+  footer p{width:100%;text-align:center;font-size:.75rem;color:var(--sub);margin:0 0 4px}
+
+  @media (max-width:560px){
+    .summary{grid-template-columns:repeat(2,1fr)}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>🎓 取りたい資格リスト</h1>
-  <p class="lead">データはこのブラウザ内（localStorage）に保存されます。</p>
+  <header class="top">
+    <h1 id="title">🎓 取りたい資格リスト</h1>
+    <button class="primary" id="addBtn">＋ 資格を追加</button>
+  </header>
 
-  <div class="stats">
-    <div class="stat"><b id="sAll">0</b><span>全部</span></div>
-    <div class="stat"><b id="sWant">0</b><span>取りたい</span></div>
-    <div class="stat"><b id="sStudy">0</b><span>勉強中</span></div>
-    <div class="stat"><b id="sDone">0</b><span>取得済み</span></div>
-  </div>
-  <div class="bar"><i id="bar"></i></div>
+  <div class="summary" id="summary"></div>
+  <div class="bar"><i id="bar" style="width:0"></i></div>
 
-  <div class="tabs" id="tabs">
-    <button data-s="all" class="on">すべて</button>
-    <button data-s="want">取りたい</button>
-    <button data-s="study">勉強中</button>
-    <button data-s="done">取得済み</button>
-  </div>
-
-  <div class="tools">
-    <input id="q" type="search" placeholder="検索（資格名・メモ）">
-    <select id="sort">
-      <option value="pri">優先度順</option>
-      <option value="date">目標日順</option>
-      <option value="new">追加が新しい順</option>
-    </select>
-    <button class="primary" id="addBtn">＋ 追加</button>
-  </div>
-
-  <div class="list" id="list"></div>
+  <main id="view"></main>
 
   <footer>
+    <p>データはこのブラウザ内（localStorage）に保存されます</p>
     <button id="exportBtn">エクスポート(JSON)</button>
     <button id="importBtn">インポート</button>
     <input type="file" id="file" accept="application/json" hidden>
@@ -114,8 +131,9 @@
     <input id="fName" required placeholder="例：基本情報技術者試験">
     <div class="row">
       <div>
-        <label>分野</label>
-        <input id="fCat" placeholder="例：IT / 語学 / 動画">
+        <label>カテゴリ</label>
+        <input id="fCat" list="catList" placeholder="例：IT / 語学 / 動画">
+        <datalist id="catList"></datalist>
       </div>
       <div>
         <label>ステータス</label>
@@ -152,150 +170,225 @@
 <script>
 const KEY = "shikaku-list-v1";
 const LABEL = {want:"取りたい", study:"勉強中", done:"取得済み"};
+const NONE = "未分類";
+const ICONS = ["🎓","💻","🖥️","🌐","📊","📈","💰","🧾","⚖️","🏗️","🔧","⚡","🚗","✈️","🎬","🎨","🎵","📷","🗣️","🇬🇧","🇯🇵","📚","✍️","🧪","🩺","🍳","🏆","📝","🔒","🤖"];
+const $ = id => document.getElementById(id);
+
 let items = load();
-let filter = "all";
+let state = {status:"all", q:"", sort:"pri"};
 let editId = null;
 
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function esc(s){ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function linkify(s){ return s.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'); }
+function catOf(i){ return (i.cat||"").trim() || NONE; }
 function load(){
   try{
     const d = JSON.parse(localStorage.getItem(KEY));
     if(Array.isArray(d)) return d;
   }catch(e){}
-  return [
-    {id:uid(), name:"基本情報技術者試験", cat:"IT", status:"want", pri:3, date:"", memo:"サンプルです。編集・削除できます。", created:Date.now()}
-  ];
+  return [{id:uid(), icon:"💻", name:"基本情報技術者試験", cat:"IT", status:"want", pri:3, date:"", memo:"サンプルです。編集・削除できます。", created:Date.now()}];
 }
 function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(items)); }catch(e){} }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-function esc(s){ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-const $ = id => document.getElementById(id);
+function count(list, s){ return list.filter(i=>i.status===s).length; }
 
-function render(){
-  const cnt = s => items.filter(i=>i.status===s).length;
-  $("sAll").textContent = items.length;
-  $("sWant").textContent = cnt("want");
-  $("sStudy").textContent = cnt("study");
-  $("sDone").textContent = cnt("done");
-  $("bar").style.width = items.length ? (cnt("done")/items.length*100)+"%" : "0";
+/* ---------- routing ---------- */
+function route(){
+  const h = decodeURIComponent(location.hash.replace(/^#/, ""));
+  if(h.startsWith("/c/")) return {page:"cat", cat:h.slice(3)};
+  if(h === "/all") return {page:"cat", cat:null};
+  return {page:"home"};
+}
+function go(path){ location.hash = path; }
+window.addEventListener("hashchange", ()=>{ state={status:"all", q:"", sort:"pri"}; render(); window.scrollTo(0,0); });
 
-  const q = $("q").value.trim().toLowerCase();
-  let view = items.filter(i =>
-    (filter==="all" || i.status===filter) &&
+/* ---------- render ---------- */
+function renderSummary(list){
+  const done = count(list,"done");
+  $("summary").innerHTML = `
+    <div class="stat"><b>${list.length}</b><span>合計</span></div>
+    <div class="stat want"><b>${count(list,"want")}</b><span>取りたい</span></div>
+    <div class="stat study"><b>${count(list,"study")}</b><span>勉強中</span></div>
+    <div class="stat done"><b>${done}</b><span>取得済み</span></div>`;
+  $("bar").style.width = list.length ? (done/list.length*100)+"%" : "0";
+}
+
+function renderHome(){
+  renderSummary(items);
+  const map = new Map();
+  items.forEach(i=>{ const c=catOf(i); if(!map.has(c)) map.set(c,[]); map.get(c).push(i); });
+  const cats = [...map.entries()].sort((a,b)=>b[1].length-a[1].length);
+
+  const card = (name, list, href, cls="") => {
+    const done = count(list,"done");
+    const icons = [...new Set(list.map(i=>i.icon||"🎓"))].slice(0,5).join(" ");
+    return `<a class="cat ${cls}" href="${href}">
+      <div class="icons">${esc(icons)}</div>
+      <h3>${esc(name)}</h3>
+      <div class="count">${list.length}件 ・ 取得 ${done}</div>
+      <div class="mini"><i style="width:${list.length?done/list.length*100:0}%"></i></div>
+      <div class="badges">
+        <span class="tag st-want">取りたい ${count(list,"want")}</span>
+        <span class="tag st-study">勉強中 ${count(list,"study")}</span>
+        <span class="tag st-done">取得済み ${done}</span>
+      </div></a>`;
+  };
+
+  $("view").innerHTML = `
+    <h2 class="sectionTitle">カテゴリ</h2>
+    <div class="cats">
+      ${card("すべての資格", items, "#/all", "all")}
+      ${cats.map(([name,list])=>card(name, list, "#/c/"+encodeURIComponent(name))).join("")}
+    </div>
+    ${items.length ? "" : `<div class="empty">まだ何もありません。「＋ 資格を追加」から登録しよう</div>`}`;
+}
+
+function daysTag(i){
+  if(!i.date || i.status==="done") return "";
+  const d = Math.round((new Date(i.date+"T00:00:00") - new Date(new Date().toDateString()))/864e5);
+  if(d>0) return `<span class="tag">📅 ${esc(i.date)}（あと${d}日）</span>`;
+  if(d===0) return `<span class="tag warn">📅 今日！</span>`;
+  return `<span class="tag warn">📅 ${esc(i.date)}（${-d}日経過）</span>`;
+}
+
+function renderCat(r){
+  const base = r.cat===null ? items : items.filter(i=>catOf(i)===r.cat);
+  const title = r.cat===null ? "すべての資格" : r.cat;
+  renderSummary(base);
+
+  const q = state.q.trim().toLowerCase();
+  let view = base.filter(i=>
+    (state.status==="all" || i.status===state.status) &&
     (!q || (i.name+" "+i.cat+" "+i.memo).toLowerCase().includes(q))
   );
-  const sort = $("sort").value;
   view.sort((a,b)=>{
-    if(sort==="pri") return b.pri-a.pri || (b.created-a.created);
-    if(sort==="date") return (a.date||"9999").localeCompare(b.date||"9999");
+    if(state.sort==="pri") return b.pri-a.pri || b.created-a.created;
+    if(state.sort==="date") return (a.date||"9999").localeCompare(b.date||"9999");
     return b.created-a.created;
   });
 
-  $("list").innerHTML = view.length ? view.map(i=>`
-    <div class="item ${i.status}">
-      <h3><span class="ico">${esc(i.icon||"🎓")}</span><span class="name">${esc(i.name)}</span><span class="stars">${"★".repeat(i.pri)}</span></h3>
-      <div class="meta">
-        <span class="tag">${LABEL[i.status]}</span>
-        ${i.cat?`<span class="tag">${esc(i.cat)}</span>`:""}
-        ${i.date?`<span class="tag">📅 ${esc(i.date)}</span>`:""}
-      </div>
-      ${i.memo?`<p class="memo">${linkify(esc(i.memo))}</p>`:""}
-      <div class="actions">
-        ${i.status!=="done"?`<button data-a="next" data-id="${i.id}">${i.status==="want"?"勉強開始":"取得した！"}</button>`:""}
-        <button data-a="edit" data-id="${i.id}">編集</button>
-        <button data-a="del" data-id="${i.id}">削除</button>
-      </div>
-    </div>`).join("") : `<div class="empty">まだ何もありません。「＋ 追加」から登録しよう</div>`;
-}
-function linkify(s){
-  return s.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  const tab = (s,l)=>`<button data-s="${s}" class="${state.status===s?"on":""}">${l}</button>`;
+  $("view").innerHTML = `
+    <a class="crumb" href="#/">← カテゴリ一覧</a>
+    <div class="pageHead"><h2>${esc(title)}</h2></div>
+    <div class="tabs" id="tabs">
+      ${tab("all","すべて")}${tab("want","取りたい")}${tab("study","勉強中")}${tab("done","取得済み")}
+    </div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="検索（資格名・メモ）" value="${esc(state.q)}">
+      <select id="sort">
+        <option value="pri">優先度順</option>
+        <option value="date">目標日順</option>
+        <option value="new">追加が新しい順</option>
+      </select>
+    </div>
+    <div class="list" id="list">
+      ${view.length ? view.map(i=>`
+        <div class="item ${i.status}">
+          <div class="head">
+            <span class="ico">${esc(i.icon||"🎓")}</span>
+            <span class="name">${esc(i.name)}</span>
+            <span class="stars">${"★".repeat(i.pri)}</span>
+          </div>
+          <div class="meta">
+            <span class="tag st-${i.status}">${LABEL[i.status]}</span>
+            ${r.cat===null?`<span class="tag">${esc(catOf(i))}</span>`:""}
+            ${daysTag(i)}
+          </div>
+          ${i.memo?`<p class="memo">${linkify(esc(i.memo))}</p>`:""}
+          <div class="actions">
+            ${i.status!=="done"?`<button data-a="next" data-id="${i.id}">${i.status==="want"?"勉強開始":"取得した！"}</button>`:""}
+            <button data-a="edit" data-id="${i.id}">編集</button>
+            <button data-a="del" data-id="${i.id}">削除</button>
+          </div>
+        </div>`).join("") : `<div class="empty">${base.length?"該当する資格がありません":"このカテゴリにはまだ資格がありません"}</div>`}
+    </div>`;
+  $("sort").value = state.sort;
 }
 
+function render(){
+  const r = route();
+  if(r.page==="cat"){
+    const exists = r.cat===null || items.some(i=>catOf(i)===r.cat);
+    if(!exists){ go("#/"); return; }   // カテゴリが空になったら一覧に戻る
+    renderCat(r);
+  } else renderHome();
+  $("catList").innerHTML = [...new Set(items.map(catOf).filter(c=>c!==NONE))].map(c=>`<option value="${esc(c)}">`).join("");
+}
+
+/* ---------- events (delegated) ---------- */
+$("view").addEventListener("click", e=>{
+  const t = e.target.closest("#tabs button");
+  if(t){ state.status = t.dataset.s; render(); return; }
+  const b = e.target.closest("button[data-a]"); if(!b) return;
+  const id = b.dataset.id, it = items.find(i=>i.id===id); if(!it) return;
+  if(b.dataset.a==="edit") openDlg(it);
+  if(b.dataset.a==="del" && confirm(`「${it.name}」を削除しますか？`)){ items=items.filter(i=>i.id!==id); persist(); render(); }
+  if(b.dataset.a==="next"){ it.status = it.status==="want" ? "study" : "done"; persist(); render(); }
+});
+$("view").addEventListener("input", e=>{
+  if(e.target.id==="q"){
+    state.q = e.target.value; const pos = e.target.selectionStart; render();
+    const q = $("q"); q.focus(); q.setSelectionRange(pos,pos);
+  }
+});
+$("view").addEventListener("change", e=>{ if(e.target.id==="sort"){ state.sort=e.target.value; render(); } });
+$("title").onclick = ()=>go("#/");
+
+/* ---------- dialog ---------- */
 function openDlg(item){
   editId = item ? item.id : null;
+  const r = route();
   $("dlgTitle").textContent = item ? "資格を編集" : "資格を追加";
-  $("fIcon").value = item?.icon ?? "🎓";
-  markPicker();
+  $("fIcon").value = item?.icon ?? "🎓"; markPicker();
   $("fName").value = item?.name ?? "";
-  $("fCat").value = item?.cat ?? "";
+  $("fCat").value = item ? (item.cat||"") : (r.page==="cat" && r.cat && r.cat!==NONE ? r.cat : "");
   $("fStatus").value = item?.status ?? "want";
   $("fPri").value = item?.pri ?? 2;
   $("fDate").value = item?.date ?? "";
   $("fMemo").value = item?.memo ?? "";
   $("dlg").showModal();
 }
-
-$("addBtn").onclick = () => openDlg(null);
-$("cancel").onclick = () => $("dlg").close();
-$("form").addEventListener("submit", e => {
-  if(!$("fName").value.trim()){ return; }
+$("addBtn").onclick = ()=>openDlg(null);
+$("cancel").onclick = ()=>$("dlg").close();
+$("form").addEventListener("submit", ()=>{
+  if(!$("fName").value.trim()) return;
   const data = {
-    icon:$("fIcon").value.trim() || "🎓",
-    name:$("fName").value.trim(), cat:$("fCat").value.trim(),
-    status:$("fStatus").value, pri:+$("fPri").value,
-    date:$("fDate").value, memo:$("fMemo").value.trim()
+    icon:$("fIcon").value.trim()||"🎓", name:$("fName").value.trim(), cat:$("fCat").value.trim(),
+    status:$("fStatus").value, pri:+$("fPri").value, date:$("fDate").value, memo:$("fMemo").value.trim()
   };
-  if(editId){
-    items = items.map(i=>i.id===editId ? {...i,...data} : i);
-  }else{
-    items.push({id:uid(), created:Date.now(), ...data});
-  }
-  persist(); render();
+  if(editId) items = items.map(i=>i.id===editId?{...i,...data}:i);
+  else items.push({id:uid(), created:Date.now(), ...data});
+  persist();
+  // カテゴリを変更した場合、今のカテゴリページに居ると空になるので一覧へ
+  render();
 });
 
-$("list").onclick = e => {
-  const b = e.target.closest("button[data-a]"); if(!b) return;
-  const id = b.dataset.id, it = items.find(i=>i.id===id); if(!it) return;
-  if(b.dataset.a==="edit") openDlg(it);
-  if(b.dataset.a==="del" && confirm(`「${it.name}」を削除しますか？`)){
-    items = items.filter(i=>i.id!==id); persist(); render();
-  }
-  if(b.dataset.a==="next"){
-    it.status = it.status==="want" ? "study" : "done"; persist(); render();
-  }
-};
-$("tabs").onclick = e => {
-  const b = e.target.closest("button"); if(!b) return;
-  filter = b.dataset.s;
-  [...$("tabs").children].forEach(x=>x.classList.toggle("on", x===b));
-  render();
-};
-$("q").oninput = render;
-$("sort").onchange = render;
+$("picker").innerHTML = ICONS.map(e=>`<button type="button" data-e="${e}">${e}</button>`).join("");
+$("picker").onclick = e=>{ const b=e.target.closest("button[data-e]"); if(!b) return; $("fIcon").value=b.dataset.e; markPicker(); };
+$("fIcon").oninput = markPicker;
+function markPicker(){ const v=$("fIcon").value.trim(); [...$("picker").children].forEach(b=>b.classList.toggle("on", b.dataset.e===v)); }
 
-$("exportBtn").onclick = () => {
+/* ---------- export / import ---------- */
+$("exportBtn").onclick = ()=>{
   const blob = new Blob([JSON.stringify(items,null,2)],{type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = "shikaku-list.json"; a.click();
-  URL.revokeObjectURL(a.href);
+  const a = document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="shikaku-list.json"; a.click(); URL.revokeObjectURL(a.href);
 };
-$("importBtn").onclick = () => $("file").click();
-$("file").onchange = e => {
-  const f = e.target.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = () => {
+$("importBtn").onclick = ()=>$("file").click();
+$("file").onchange = e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{
     try{
-      const d = JSON.parse(r.result);
-      if(!Array.isArray(d)) throw 0;
-      items = d.map(i=>({id:i.id||uid(), icon:String(i.icon||"🎓"), name:String(i.name||""), cat:String(i.cat||""),
+      const d=JSON.parse(r.result); if(!Array.isArray(d)) throw 0;
+      items=d.map(i=>({id:i.id||uid(), icon:String(i.icon||"🎓"), name:String(i.name||""), cat:String(i.cat||""),
         status:LABEL[i.status]?i.status:"want", pri:[1,2,3].includes(+i.pri)?+i.pri:2,
         date:i.date||"", memo:String(i.memo||""), created:i.created||Date.now()}));
       persist(); render();
     }catch(err){ alert("読み込めないファイルです"); }
   };
-  r.readAsText(f); e.target.value = "";
+  r.readAsText(f); e.target.value="";
 };
-
-const ICONS = ["🎓","💻","🖥️","🌐","📊","📈","💰","🧾","⚖️","🏗️","🔧","⚡","🚗","✈️","🎬","🎨","🎵","📷","🗣️","🇬🇧","🇯🇵","📚","✍️","🧪","🩺","🍳","🏆","📝","🔒","🤖"];
-$("picker").innerHTML = ICONS.map(e=>`<button type="button" data-e="${e}">${e}</button>`).join("");
-$("picker").onclick = e => {
-  const b = e.target.closest("button[data-e]"); if(!b) return;
-  $("fIcon").value = b.dataset.e; markPicker();
-};
-$("fIcon").oninput = markPicker;
-function markPicker(){
-  const v = $("fIcon").value.trim();
-  [...$("picker").children].forEach(b=>b.classList.toggle("on", b.dataset.e===v));
-}
 
 render();
 </script>
